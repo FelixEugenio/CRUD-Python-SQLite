@@ -1,7 +1,8 @@
 #importando o Tkinter
 from tkinter import *
 from tkinter import ttk
-from main import mostrar_info
+from clientesController import inserir_dados, mostrar_info
+from tkinter import messagebox
 
 ################# cores ###############
 co0 = "#f0f3f5"  # Preta
@@ -32,6 +33,37 @@ frame_baixo.grid(row=1, column=0, sticky='NSEW', padx=0, pady=1)
 
 frame_centro = Frame(janela, width=588, height=403, bg=co1, relief='flat')
 frame_centro.grid(row=0, column=1, rowspan=2, padx=1, pady=0, sticky='NSEW')
+
+
+
+#funcao inserir 
+def inserir():
+    nome = caixaTexto_nome.get()
+    email = caixa_email.get()
+    telefone = caixa_telefone.get()
+    nif = caixa_nif.get()
+    morada = caixa_morada.get()
+    
+    lista = [nome,email,telefone,nif,morada]
+    
+    if nome =='':
+        messagebox.showerror('Erro','O nome nao pode ser vazio')
+    else:
+        inserir_dados(lista)
+        messagebox.showinfo('Sucesso','os dados foram inseridos com sucesso')    
+    
+        caixaTexto_nome.delete(0,'end')
+        caixa_email.delete(0,'end')
+        caixa_telefone.delete(0,'end')
+        caixa_nif.delete(0,'end')
+        caixa_morada.delete(0,'end')
+        
+        for widget in frame_centro.winfo_children():
+            widget.destroy()
+          
+        mostrar()
+        
+          
 
 ################# label de titulo ###############
 label_titulo = Label(frame_cima, text='Formulario de Clientes', anchor=NW, font=('Ivy 13 bold'), bg=co2, fg=co1, relief='flat')
@@ -77,51 +109,17 @@ label_morada.place(x=10, y=250)
 caixa_morada = Entry(frame_baixo, width=45, justify='left', relief='solid')
 caixa_morada.place(x=10, y=280)
 
-# Função para inserir dados na tabela
-def inserir_dados():
-    nome = caixaTexto_nome.get()
-    email = caixa_email.get()
-    telefone = caixa_telefone.get()
-    nif = caixa_nif.get()
-    morada = caixa_morada.get()
-
-    if nome and email and telefone and nif and morada:  # Verifica se todos os campos estão preenchidos
-        tree.insert('', 'end', values=(tree.get_children().__len__()+1, nome, email, telefone, nif, morada))
-        caixaTexto_nome.delete(0, END)
-        caixa_email.delete(0, END)
-        caixa_telefone.delete(0, END)
-        caixa_nif.delete(0, END)
-        caixa_morada.delete(0, END)
-    else:
-        print("Preencha todos os campos")
-
-# Função para atualizar dados selecionados na tabela
-def atualizar_dados():
-    selected_item = tree.selection()
-    if selected_item:
-        item = tree.item(selected_item)
-        tree.item(selected_item, values=(item['values'][0], caixaTexto_nome.get(), caixa_email.get(), caixa_telefone.get(), caixa_nif.get(), caixa_morada.get()))
-    else:
-        print("Selecione um item para atualizar")
-
-# Função para deletar dados selecionados na tabela
-def deletar_dados():
-    selected_item = tree.selection()
-    if selected_item:
-        tree.delete(selected_item)
-    else:
-        print("Selecione um item para deletar")
 
 # Botão de Inserir
-botao_inserir = Button(frame_baixo, text="Inserir", command=inserir_dados, bg=co6, fg=co1, font=('Ivy 10 bold'), relief='flat')
+botao_inserir = Button(frame_baixo, text="Inserir", command=inserir, bg=co6, fg=co1, font=('Ivy 10 bold'), relief='flat')
 botao_inserir.place(x=10, y=320)
 
 # Botão de Atualizar
-botao_atualizar = Button(frame_baixo, text="Atualizar", command=atualizar_dados, bg=co2, fg=co1, font=('Ivy 10 bold'), relief='flat')
+botao_atualizar = Button(frame_baixo, text="Atualizar", bg=co2, fg=co1, font=('Ivy 10 bold'), relief='flat')
 botao_atualizar.place(x=110, y=320)
 
 # Botão de Eliminar
-botao_eliminar = Button(frame_baixo, text="Eliminar", command=deletar_dados, bg=co7, fg=co1, font=('Ivy 10 bold'), relief='flat')
+botao_eliminar = Button(frame_baixo, text="Eliminar",  bg=co7, fg=co1, font=('Ivy 10 bold'), relief='flat')
 botao_eliminar.place(x=210, y=320)
 
 ################# Configurando Frame do centro ###############

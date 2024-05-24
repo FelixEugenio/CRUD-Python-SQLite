@@ -10,11 +10,12 @@ with conexao:
     cur.execute("CREATE TABLE IF NOT EXISTS tbl_clientes (id_client INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT, telefone INTEGER, nif INTEGER, morada TEXT)")
 
 # inserindo dados na tabela de clientes
-lista = ['Joao Futi Muanda', 'joao@mail.com', 933273210, 322613647, 'Praca Luis de Camoes N8']
-with conexao:
-     cur = conexao.cursor()
-     query = "INSERT INTO tbl_clientes (nome, email, telefone, nif, morada) VALUES (?, ?, ?, ?, ?)"
-     cur.execute(query, lista)
+def inserir_dados(i):
+    
+     with conexao:
+      cur = conexao.cursor()
+      query = "INSERT INTO tbl_clientes (nome, email, telefone, nif, morada) VALUES (?, ?, ?, ?, ?)"
+      cur.execute(query, i)
 
 # acessando informações da tabela de clientes
 def mostrar_info():
