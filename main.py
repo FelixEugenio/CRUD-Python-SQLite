@@ -17,14 +17,17 @@ with conexao:
      cur.execute(query, lista)
 
 # acessando informações da tabela de clientes
-with conexao:
-    cur = conexao.cursor()
-    query = "SELECT * FROM tbl_clientes"
-    cur.execute(query)
-    informacoes = cur.fetchall()
-    print("Informações dos clientes:")
-    for info in informacoes:
-        print(info)
+def mostrar_info():
+    lista = []
+    with conexao:
+          cur = conexao.cursor()
+          query = "SELECT * FROM tbl_clientes"
+          cur.execute(query)
+          informacoes = cur.fetchall()
+          print("Informações dos clientes:")
+          for i in informacoes:
+              lista.append(i)
+    return lista        
 
 # atualizando informações na tabela de clientes
 lista_atualizada = ['Lissandro Gay', 1]   

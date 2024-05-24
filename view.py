@@ -1,7 +1,7 @@
 #importando o Tkinter
 from tkinter import *
 from tkinter import ttk
-from main import *
+from main import mostrar_info
 
 ################# cores ###############
 co0 = "#f0f3f5"  # Preta
@@ -16,6 +16,7 @@ co8 = "#263238"  # + verde
 co9 = "#e9edf5"  # sky blue
 
 ################# criando Janela ###############
+
 janela = Tk()
 janela.title("Formulario de Clientes")
 janela.geometry("1043x453")
@@ -153,5 +154,13 @@ for col in tabela_head:
     tree.heading(col, text=col.title(), anchor=CENTER)
     tree.column(col, width=h[n], anchor=hd[n])
     n += 1
+
+# Função para mostrar dados na tabela
+def mostrar():
+    lista = mostrar_info()  # Obtendo dados de uma função externa (main.py)
+    for item in lista:
+        tree.insert('', 'end', values=item)
+
+mostrar()
 
 janela.mainloop()
