@@ -1,6 +1,7 @@
 #importando o Tkinter
 from tkinter import *
 from tkinter import ttk
+from main import *
 
 ################# cores ###############
 co0 = "#f0f3f5"  # Preta
@@ -15,7 +16,6 @@ co8 = "#263238"  # + verde
 co9 = "#e9edf5"  # sky blue
 
 ################# criando Janela ###############
-
 janela = Tk()
 janela.title("Formulario de Clientes")
 janela.geometry("1043x453")
@@ -76,37 +76,66 @@ label_morada.place(x=10, y=250)
 caixa_morada = Entry(frame_baixo, width=45, justify='left', relief='solid')
 caixa_morada.place(x=10, y=280)
 
+# Função para inserir dados na tabela
+def inserir_dados():
+    nome = caixaTexto_nome.get()
+    email = caixa_email.get()
+    telefone = caixa_telefone.get()
+    nif = caixa_nif.get()
+    morada = caixa_morada.get()
+
+    if nome and email and telefone and nif and morada:  # Verifica se todos os campos estão preenchidos
+        tree.insert('', 'end', values=(tree.get_children().__len__()+1, nome, email, telefone, nif, morada))
+        caixaTexto_nome.delete(0, END)
+        caixa_email.delete(0, END)
+        caixa_telefone.delete(0, END)
+        caixa_nif.delete(0, END)
+        caixa_morada.delete(0, END)
+    else:
+        print("Preencha todos os campos")
+
+# Função para atualizar dados selecionados na tabela
+def atualizar_dados():
+    selected_item = tree.selection()
+    if selected_item:
+        item = tree.item(selected_item)
+        tree.item(selected_item, values=(item['values'][0], caixaTexto_nome.get(), caixa_email.get(), caixa_telefone.get(), caixa_nif.get(), caixa_morada.get()))
+    else:
+        print("Selecione um item para atualizar")
+
+# Função para deletar dados selecionados na tabela
+def deletar_dados():
+    selected_item = tree.selection()
+    if selected_item:
+        tree.delete(selected_item)
+    else:
+        print("Selecione um item para deletar")
+
 # Botão de Inserir
-botao_inserir = Button(frame_baixo, text="Inserir", bg=co6, fg=co1, font=('Ivy 10 bold'), relief='flat')
+botao_inserir = Button(frame_baixo, text="Inserir", command=inserir_dados, bg=co6, fg=co1, font=('Ivy 10 bold'), relief='flat')
 botao_inserir.place(x=10, y=320)
 
 # Botão de Atualizar
-botao_atualizar = Button(frame_baixo, text="Atualizar", bg=co2, fg=co1, font=('Ivy 10 bold'), relief='flat')
+botao_atualizar = Button(frame_baixo, text="Atualizar", command=atualizar_dados, bg=co2, fg=co1, font=('Ivy 10 bold'), relief='flat')
 botao_atualizar.place(x=110, y=320)
 
 # Botão de Eliminar
-botao_eliminar = Button(frame_baixo, text="Eliminar", bg=co7, fg=co1, font=('Ivy 10 bold'), relief='flat')
+botao_eliminar = Button(frame_baixo, text="Eliminar", command=deletar_dados, bg=co7, fg=co1, font=('Ivy 10 bold'), relief='flat')
 botao_eliminar.place(x=210, y=320)
 
-lista = [[1,'Joao Futi Muanda','joao@mail.com', 933273210, 322613647, 'Praca Luis de Camoes N8'],
-           [2,'Fortnato Mpngo', 'joao@mail.com', 931728499,322613647 , 'Praca Joao Vilarete N12'],
-           [3,'Usando Python',  'joao@mail.com', 929374017, 322613647, 'Praceta Joa vilarete N14'],
-           [4,'Clinton Berclidio', 'joao@mail.com', 931878297,322613647 , 'Praceta Joa vilarete N14', ],
-           [5,'A traicao da Julieta','joao@mail.com', 922945564,322613647 , 'Praceta Joa vilarete N14']
-           ]
+################# Configurando Frame do centro ###############
 
-#lista para cabecario
-tabela_head = ['ID','Nome',  'email','telefone', 'Nif', 'Morada']
+#lista para cabeçalho
+tabela_head = ['ID', 'Nome', 'Email', 'Telefone', 'Nif', 'Morada']
 
-
-#criando a tabela
+# criando a tabela
 tree = ttk.Treeview(frame_centro, selectmode="extended", columns=tabela_head, show="headings")
 
-#vertical scrollbar
+# vertical scrollbar
 vsb = ttk.Scrollbar(frame_centro, orient="vertical", command=tree.yview)
 
-#horizontal scrollbar
-hsb = ttk.Scrollbar( frame_centro, orient="horizontal", command=tree.xview)
+# horizontal scrollbar
+hsb = ttk.Scrollbar(frame_centro, orient="horizontal", command=tree.xview)
 
 tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
 tree.grid(column=0, row=0, sticky='nsew')
@@ -115,22 +144,14 @@ hsb.grid(column=0, row=1, sticky='ew')
 
 frame_centro.grid_rowconfigure(0, weight=12)
 
-
-hd=["nw","nw","nw","nw","nw","center","center"]
-h=[30,170,140,100,120,50,100]
-n=0
+# Configurando as colunas da tabela
+hd = ["nw", "nw", "nw", "nw", "nw", "center"]
+h = [30, 170, 140, 100, 120, 150]
+n = 0
 
 for col in tabela_head:
     tree.heading(col, text=col.title(), anchor=CENTER)
-   # adjust the column's width to the header string
-    tree.column(col, width=h[n],anchor=hd[n])
-    
-    n+=1
-
-for item in lista:
-    tree.insert('', 'end', values=item)
-
-
-
+    tree.column(col, width=h[n], anchor=hd[n])
+    n += 1
 
 janela.mainloop()
