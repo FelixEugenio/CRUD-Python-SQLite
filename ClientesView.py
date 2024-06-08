@@ -1,4 +1,3 @@
-# Importando bibliotecas
 import sqlite3 as lite
 from tkinter import *
 from tkinter import ttk
@@ -40,6 +39,10 @@ def mostrar_info():
             lista.append(i)
     return lista
 
+# Função para validar campos de nove dígitos
+def validar_nove_digitos(P):
+    return P.isdigit() and len(P) <= 9
+
 # Função para inserir dados através da interface gráfica
 def inserir():
     nome = caixaTexto_nome.get()
@@ -50,8 +53,10 @@ def inserir():
 
     lista = [nome, email, telefone, nif, morada]
 
-    if nome == '':
-        messagebox.showerror('Erro', 'O nome não pode ser vazio')
+    if nome == '' or email == '' or telefone == '' or nif == '' or morada == '':
+        messagebox.showerror('Erro', 'Todos os campos são obrigatórios')
+    elif len(telefone) != 9 or len(nif) != 9:
+        messagebox.showerror('Erro', 'Telefone e NIF devem conter exatamente 9 dígitos')
     else:
         inserir_dados(lista)
         messagebox.showinfo('Sucesso', 'Os dados foram inseridos com sucesso')
@@ -114,6 +119,9 @@ janela.geometry("1043x453")
 janela.configure(background=co9)
 janela.resizable(width=False, height=False)
 
+# Função de validação de nove dígitos
+vcmd = (janela.register(validar_nove_digitos), '%P')
+
 # Dividindo a janela em frames
 frame_cima = Frame(janela, width=310, height=50, bg=co2, relief='flat')
 frame_cima.grid(row=0, column=0)
@@ -144,13 +152,13 @@ caixa_email.place(x=10, y=100)
 label_telefone = Label(frame_baixo, text='Telefone *', anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4, relief='flat')
 label_telefone.place(x=10, y=130)
 
-caixa_telefone = Entry(frame_baixo, width=45, justify='left', relief='solid')
+caixa_telefone = Entry(frame_baixo, width=45, justify='left', relief='solid', validate='key', validatecommand=vcmd)
 caixa_telefone.place(x=10, y=160)
 
 label_nif = Label(frame_baixo, text='Nif *', anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4, relief='flat')
 label_nif.place(x=10, y=190)
 
-caixa_nif = Entry(frame_baixo, width=45, justify='left', relief='solid')
+caixa_nif = Entry(frame_baixo, width=45, justify='left', relief='solid', validate='key', validatecommand=vcmd)
 caixa_nif.place(x=10, y=220)
 
 label_morada = Label(frame_baixo, text='Morada *', anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4, relief='flat')

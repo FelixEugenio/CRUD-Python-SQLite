@@ -166,3 +166,4 @@ tabela_head = ['ID', 'ID_Viatura', 'Data', 'Kms', 'Descrição']
 mostrar()
 
 janela.mainloop()
+
